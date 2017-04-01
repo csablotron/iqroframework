@@ -2,6 +2,7 @@
 
 session_start();
 require __DIR__ .'/vendor/autoload.php';
+require __DIR__ .'/system/config/dependencies.php';
 require __DIR__ .'/system/config/database.php';
 
 $app = new \Slim\App($config);
@@ -21,11 +22,17 @@ $container['view'] = function($container){
 	return $view;
 };
 
+
 $capsule = new Illuminate\Database\Capsule\Manager;
-$capsule->addConnection($container->get('db'));
+$capsule->addConnection($container['db']);
+$capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-require __DIR__.'/system/config/dependencies.php';
+$container['db'] = function($container) use ($capsule){
+	return $capsule;
+};
+
+require __DIR__.'/system/config/preroute.php';
 require __DIR__ .'/system/config/routes.php';
 
 $app->run();

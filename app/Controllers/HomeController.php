@@ -11,14 +11,16 @@ class HomeController extends BaseController
 		$views = [
 			'title' => 'Home Sample',
 			'css' => [
-				'packages/bootstrap/css/bootstrap.min.css',
-				'assets/style.css'
+				'resources/packages/bootstrap/css/bootstrap.min.css',
+				'assets/css/style.css'
 			],
 			'js' => [
 				'assets/js/jquery.min.js'
-			]
+			],
+			'db' => $this->db->table('users')->find(1)
 		];
 
+		
 		return $this->view->render($response, 'home.twig', $views);
 
 	}
